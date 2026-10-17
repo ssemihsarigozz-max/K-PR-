@@ -12,6 +12,9 @@ elements['check-demo'].addEventListener('click', checkDemo);
 elements['preview-order'].addEventListener('click', previewOrder);
 elements['confirm-order'].addEventListener('click', confirmOrder);
 elements['record-fuji'].addEventListener('click', recordFuji);
+document.querySelector('[data-scroll-to]')?.addEventListener('click', () => {
+  document.getElementById('policy-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
 checkHealth();
 
 async function checkHealth() {

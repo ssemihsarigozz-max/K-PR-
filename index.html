@@ -3,34 +3,82 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Köprü: canlı OKX ve etiketli mock CEX/DEX arbitraj gözlemcisi" />
-    <title>Köprü — CEX/DEX Fırsat Tarayıcı</title>
+    <meta name="description" content="Köprü Earth Command: canlı OKX ve etiketli CEX/DEX arbitraj gözlemcisi" />
+    <title>Köprü — Earth Command</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <div class="space-noise" aria-hidden="true"></div>
     <main class="shell">
+      <nav class="topbar" aria-label="Ana navigasyon">
+        <a class="brand" href="/"><span class="brand-mark">K</span><span>KÖPRÜ <small>EARTH COMMAND</small></span></a>
+        <div class="nav-meta"><span><i></i> Dünya ağı çevrimiçi</span><a href="/portal">Yörünge portalı ↗</a></div>
+      </nav>
+
       <header class="hero">
-        <div><p class="eyebrow">CANLI OKX + ETİKETLİ CEX/DEX SİMÜLASYONU</p><h1>Köprü</h1><p class="lede">BTC fiyatını farklı piyasalarda aynı TL tabanına taşır; ücret, kayma ve ağ maliyetinden sonra görünen arbitraj rotalarını karşılaştırır.</p></div>
-        <div class="status-card"><span id="api-dot" class="dot"></span><div><strong id="api-status">Sistem kontrol ediliyor</strong><small id="system-detail">ATK ve Fuji durumu okunuyor</small></div></div>
+        <div class="hero-copy">
+          <p class="eyebrow">GLOBAL LIQUIDITY OBSERVATORY · SEKTÖR 01</p>
+          <h1>Likiditeyi<br /><em>Dünya</em> çevresinde izle.</h1>
+          <p class="lede">Köprü, OKX TR ile global piyasaları aynı TL yörüngesinde buluşturur; maliyetleri hesaplar ve güvenli arbitraj rotalarını görünür kılar.</p>
+          <div class="hero-actions">
+            <button data-scroll-to="policy-title">Taramayı başlat</button>
+            <a class="ghost-link" href="/portal">Gezegen portalını aç</a>
+          </div>
+          <div class="status-card"><span id="api-dot" class="dot"></span><div><strong id="api-status">Yer istasyonu kontrol ediliyor</strong><small id="system-detail">OKX ve güvenlik sistemleri okunuyor</small></div></div>
+        </div>
+
+        <div class="earth-stage" aria-label="Dünya çevresindeki borsa ağı görselleştirmesi">
+          <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="orbit orbit-c"></div>
+          <div class="earth"><div class="earth-grid"></div><div class="atmosphere"></div></div>
+          <div class="station station-okx"><span></span><strong>OKX TR</strong><small>LIVE</small></div>
+          <div class="station station-global"><span></span><strong>OKX GLOBAL</strong><small>LIVE</small></div>
+          <div class="station station-binance"><span></span><strong>BINANCE</strong><small>MOCK</small></div>
+          <div class="station station-dex"><span></span><strong>DEX GRID</strong><small>MOCK</small></div>
+          <div class="earth-caption"><span>01</span><div><small>AKTİF GEZEGEN</small><strong>EARTH / BTC-TRY</strong></div></div>
+        </div>
       </header>
 
+      <section class="signal-strip" aria-label="Canlı sistem özeti">
+        <div><small>ANA BAĞLANTI</small><strong>OKX TR ↔ OKX GLOBAL</strong></div>
+        <div><small>CANLI KAYNAK</small><strong>2 İSTASYON</strong></div>
+        <div><small>GÖZLEM AĞI</small><strong>16 PİYASA</strong></div>
+        <div><small>İŞLEM MODU</small><strong class="safe-text">PAPER / GÜVENLİ</strong></div>
+      </section>
+
       <ol class="flow" aria-label="Köprü işlem akışı">
-        <li><span>1</span>Veriyi al</li><li><span>2</span>Piyasaları normalize et</li><li><span>3</span>Rotayı hesapla</li><li><span>4</span>Güvenle doğrula</li>
+        <li><span>01</span><div><strong>Sinyali al</strong><small>Canlı piyasa verisi</small></div></li>
+        <li><span>02</span><div><strong>Normalize et</strong><small>Ortak TL yörüngesi</small></div></li>
+        <li><span>03</span><div><strong>Rotayı hesapla</strong><small>Ücret + kayma + ağ</small></div></li>
+        <li><span>04</span><div><strong>Güvenle doğrula</strong><small>Emir kilidi kontrolü</small></div></li>
       </ol>
 
-      <section class="panel policy" aria-labelledby="policy-title">
-        <div class="section-heading"><div><p class="eyebrow">KULLANICI POLİTİKASI</p><h2 id="policy-title">Alım kuralın</h2></div><span class="safe-badge">Emir varsayılan olarak kapalı</span></div>
-        <div class="fields">
-          <label>Bütçe (TL)<input id="budget" type="number" min="1" max="1000" step="1" value="1000" /></label>
-          <label>Kabul edilen en yüksek fark (%)<input id="premium" type="number" min="0" max="20" step="0.1" value="0.8" /></label>
-        </div>
-        <div class="actions"><button id="scan-ecosystem">CEX/DEX ekosistemini tara</button><button id="check-live" class="secondary">Yalnız OKX kararını kontrol et</button><button id="check-demo" class="secondary">Örnek senaryoyu göster</button></div>
-        <p id="source-note" class="hint">OKX TR ve Global canlıdır. Diğer borsa ve DEX fiyatları, canlı OKX referansından üretilen ve açıkça MOCK işaretlenen simülasyonlardır.</p>
+      <section class="command-grid">
+        <section class="panel policy" aria-labelledby="policy-title">
+          <div class="section-heading"><div><p class="eyebrow">GÖREV KONTROLÜ</p><h2 id="policy-title">Tarama parametreleri</h2></div><span class="safe-badge">● EMİR KİLİTLİ</span></div>
+          <p class="panel-intro">Görevin sermaye ve fiyat toleransını belirle. Sistem önce gözlemler, sonra yalnızca bir işlem planı üretir.</p>
+          <div class="fields">
+            <label>Bütçe (TL)<input id="budget" type="number" min="1" max="1000" step="1" value="1000" /></label>
+            <label>En yüksek fark (%)<input id="premium" type="number" min="0" max="20" step="0.1" value="0.8" /></label>
+          </div>
+          <div class="actions"><button id="scan-ecosystem">Dünya ağını tara</button><button id="check-live" class="secondary">OKX rotasını kontrol et</button><button id="check-demo" class="secondary">Simülasyon çalıştır</button></div>
+          <p id="source-note" class="hint">OKX TR ve Global canlıdır. Diğer borsa ve DEX fiyatları, canlı OKX referansından üretilen ve açıkça MOCK işaretlenen simülasyonlardır.</p>
+        </section>
+
+        <aside class="panel telemetry" aria-label="Dünya ağı telemetrisi">
+          <p class="eyebrow">YÖRÜNGE TELEMETRİSİ</p><h2>Bağlantı haritası</h2>
+          <div class="mini-earth"><span></span></div>
+          <ul>
+            <li><i class="live-pulse"></i><div><strong>İstanbul</strong><small>OKX TR · CANLI</small></div><b>01</b></li>
+            <li><i class="live-pulse"></i><div><strong>Global Hub</strong><small>OKX GLOBAL · CANLI</small></div><b>02</b></li>
+            <li><i></i><div><strong>Simulation Ring</strong><small>14 CEX / DEX · MOCK</small></div><b>16</b></li>
+          </ul>
+          <div class="telemetry-foot"><span>Güvenli mod</span><strong>Gerçek emir kapalı</strong></div>
+        </aside>
       </section>
 
       <section id="message" class="message hidden" role="alert"></section>
       <section id="result" class="panel result hidden" aria-live="polite">
-        <div class="decision"><div><p class="eyebrow">KARAR</p><h2 id="decision-title">—</h2></div><p id="decision-reason"></p></div>
+        <div class="decision"><div><p class="eyebrow">ROTA KARARI</p><h2 id="decision-title">—</h2></div><p id="decision-reason"></p></div>
         <div id="price-grid" class="grid"></div>
         <div class="result-actions"><button id="preview-order">İşlem planını hazırla</button><button id="record-fuji" class="secondary">Kararı Fuji’ye kaydet</button></div>
         <p id="result-meta" class="timestamp"></p>
@@ -41,15 +89,17 @@
         <div id="approval-controls" class="hidden"><label>Devam etmek için <strong>ONAYLIYORUM</strong> yaz<input id="confirmation" autocomplete="off" /></label><button id="confirm-order" class="danger">Gerçek spot emri gönder</button></div>
       </section>
 
-      <section id="ecosystem" class="panel hidden" aria-live="polite">
-        <div class="section-heading"><div><p class="eyebrow">ÇOKLU PİYASA GÖZLEMCİSİ</p><h2>Temsilî CEX / DEX kapsamı</h2></div><p id="coverage-summary" class="coverage-summary"></p></div>
+      <section id="ecosystem" class="panel ecosystem hidden" aria-live="polite">
+        <div class="section-heading"><div><p class="eyebrow">DÜNYA PİYASA AĞI</p><h2>CEX / DEX istasyonları</h2></div><p id="coverage-summary" class="coverage-summary"></p></div>
         <div class="legend" aria-label="Veri durumu açıklamaları"><span class="badge live">CANLI</span><small>Gerçek API verisi</small><span class="badge mock">MOCK</span><small>Simülasyon, emir yok</small><span class="badge config">YAPILANDIRMA GEREKLİ</span><small>Entegrasyon hazır değil</small></div>
         <article id="opportunity" class="opportunity"></article>
         <div class="table-wrap"><table><thead><tr><th>Piyasa</th><th>Tür</th><th>Durum</th><th>Ham BTC/TL</th><th>Efektif alış</th><th>Efektif satış</th><th>Maliyet modeli</th></tr></thead><tbody id="venue-rows"></tbody></table></div>
-        <div><p class="eyebrow provider-title">VERİ SAĞLAYICILARI</p><div id="provider-list" class="provider-list"></div></div>
+        <div><p class="eyebrow provider-title">VERİ UYDULARI</p><div id="provider-list" class="provider-list"></div></div>
       </section>
 
-      <section class="panel transparency"><h2>Köprü neyi garanti etmez?</h2><div class="grid"><p>Fiyat farkı kâr garantisi değildir. Piyasa hareketi, ücret, kayma, ağ maliyeti ve transfer süresi sonucu değiştirebilir.</p><p>MOCK etiketli kaynaklar gerçek fiyat değildir. Sistem şu aşamada borsalar arasında para taşımaz ve gerçek çoklu-piyasa emri göndermez.</p></div></section>
+      <section class="panel transparency"><div><p class="eyebrow">GÖREV SINIRLARI</p><h2>Köprü neyi garanti etmez?</h2></div><div class="grid"><p>Fiyat farkı kâr garantisi değildir. Piyasa hareketi, ücret, kayma, ağ maliyeti ve transfer süresi sonucu değiştirebilir.</p><p>MOCK etiketli kaynaklar gerçek fiyat değildir. Sistem şu aşamada borsalar arasında para taşımaz ve gerçek çoklu-piyasa emri göndermez.</p></div></section>
+
+      <footer><span>KÖPRÜ / EARTH COMMAND</span><small>Canlı gözlem · kontrollü simülasyon · güvenli karar</small></footer>
     </main>
     <script type="module" src="/src/app.js"></script>
   </body>
