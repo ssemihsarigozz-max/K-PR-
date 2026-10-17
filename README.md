@@ -44,7 +44,7 @@ Ardından `http://127.0.0.1:4173` adresini açın.
 
 ## Görsel portal prototipi
 
-Tasarım araştırması için eklenen tek dosyalık, canvas tabanlı **Planet Jumping** deneyimi `/portal` adresinde açılır. Bu deneyim mevcut Köprü kontrol panelinden ayrıdır; finansal işlevleri değiştirmez. Mars → Earth → Venus geçişi, video preloader, pointer tilt, özel imleç ve mobil kırılımlar aynı HTML dosyasında bulunur.
+Tek dosyalık, canvas tabanlı **Liquidity Jumping** deneyimi `/portal` adresinde açılır. Sinematik video ve portal animasyonları; OKX TR → Binance → Avalanche DEX anlatısına bağlanır. Ekrandaki canlı/mock kapsamı mevcut fırsat API’sinden okunur; mock rotalar yalnızca simülasyondur ve emir üretmez.
 
 ## Önemli API uçları
 

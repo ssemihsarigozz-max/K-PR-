@@ -26,6 +26,6 @@ test('health ve piyasa API uçları yanıt verir', async (t) => {
   assert.equal(opportunities.policy.budgetTry, 2500);
   const portal = await fetch(`${base}/portal`);
   assert.equal(portal.status, 200);
-  assert.match(await portal.text(), /Planet Jumping/);
+  assert.match(await portal.text(), /Köprü — Liquidity Jumping/);
   assert.match(portal.headers.get('content-security-policy'), /d2ol7oe51mr4n9\.cloudfront\.net/);
 });
