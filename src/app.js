@@ -21,7 +21,7 @@ async function checkHealth() {
     elements['api-status'].textContent = 'Köprü sunucusu hazır';
     const fuji = health.fuji.configured ? 'Fuji hazır' : 'Fuji yapılandırılmadı';
     const trading = health.tradingEnabled ? 'emir açık' : 'emir güvenlik kilidinde';
-    const agent = health.agent?.running ? 'paper agent aktif' : 'paper agent durdu';
+    const agent = health.agent?.running ? 'paper agent aktif' : health.agent?.phase === 'LOCAL_ONLY' ? 'paper agent yalnızca yerelde' : 'paper agent durdu';
     elements['system-detail'].textContent = `${agent} · ${fuji} · ${trading}`;
   } catch (error) {
     elements['api-status'].textContent = 'Sunucuya ulaşılamıyor';

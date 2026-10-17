@@ -79,6 +79,10 @@ npm run agent:start
 
 Portföy, son kararlar ve olay geçmişi `.local-data/agent-state.json` içinde yerel olarak saklanır ve Git’e eklenmez. Varsayılan güvenlik politikası: 10.000 TL sanal başlangıç bakiyesi, tur başına 1.000 TL, günde en fazla 3 paper işlem, işlemler arasında 30 dakika ve en fazla 5.000 TL BTC pozisyonu. Agentın gerçek emir servisine erişimi yoktur.
 
+## Vercel dağıtımı
+
+Vercel sürümü dashboard, sinematik portal ve canlı OKX piyasa karşılaştırmasını sunar. Sunucusuz fonksiyonlar istek olmadığında durduğu ve kalıcı yerel dosya sistemi sağlamadığı için 60 saniyelik paper agent yalnızca yerel sunucuda çalışır. Vercel üzerinde gerçek emir, agent başlatma ve Fuji yazımı kapalıdır.
+
 ## Proje yapısı
 
 - `server/okx-atk.js`: OKX Agent Trade Kit adaptörü
