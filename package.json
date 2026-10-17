@@ -5,7 +5,22 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "start": "npx serve ."
+    "start": "node server/index.js",
+    "check": "node --check server/index.js && node --check src/app.js && npm test && npm run contract:compile",
+    "contract:compile": "node scripts/compile-contract.js",
+    "fuji:wallet": "node scripts/create-fuji-wallet.js",
+    "fuji:deploy": "node scripts/deploy-fuji.js"
   },
-  "description": "OKX TR BTC alım kararını açıklanabilir kurallarla destekleyen MVP"
+  "description": "Canlı OKX ve etiketli mock CEX/DEX verileriyle agentic arbitraj gözlemcisi",
+  "dependencies": {
+    "@okx_ai/okx-trade-cli": "^1.4.8",
+    "ethers": "^6.17.0",
+    "solc": "0.8.36"
+  },
+  "overrides": {
+    "tmp": "0.2.7"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }

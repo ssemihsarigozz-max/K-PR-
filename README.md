@@ -1,30 +1,72 @@
 # Köprü
 
-OKX TR'de TL ile BTC alan kullanıcı için, global BTC-USDT fiyatını USDT-TRY ile TL'ye çevirir; OKX TR BTC alış fiyatıyla kıyaslayıp kullanıcının limiti içinde **AL** veya **BEKLE** işlem planı üretir.
+Köprü, BTC fiyatını CEX ve DEX kaynaklarında ortak bir TL tabanına getirip ücret, kayma ve ağ maliyeti sonrasında karşılaştıran agentic arbitraj gözlemcisidir.
 
-Bu MVP kâr garantisi veya otomatik arbitraj sunmaz. Emir göndermez.
+> Güvenlik sınırı: Bu sürüm gerçek arbitraj emri göndermez. OKX spot emir modülü iki aşamalı onayla hazırlanmıştır fakat varsayılan olarak kapalıdır. MOCK etiketli hiçbir sonuç çalıştırılabilir değildir.
+
+## Bugün gerçekten çalışanlar
+
+- OKX Agent Trade Kit üzerinden **OKX Global BTC-USDT**, **OKX TR BTC-TRY** ve **OKX TR USDT-TRY** canlı fiyatları.
+- Fiyat tazeliği, bütçe ve kullanıcı fark limiti kontrolleri.
+- OKX TR için AL / BEKLE kararı ve iki aşamalı emir önizlemesi.
+- Temsilî 16 piyasalık CEX/DEX taraması: 2 canlı, 14 deterministik MOCK.
+- Ücret, kayma ve DEX ağ maliyetini içeren efektif alış/satış hesabı.
+- Mock ayak içeren rotalarda zorunlu `executable: false` güvenlik kuralı.
+- Avalanche Fuji karar kaydı kontratı, derleme ve dağıtım betikleri.
+- 16 otomatik test ve Solidity derleme kontrolü.
+
+## Veri durumu
+
+| Kaynak | Durum | Açıklama |
+|---|---|---|
+| OKX TR | CANLI | Agent Trade Kit ticker verisi |
+| OKX Global | CANLI | Agent Trade Kit ticker verisi |
+| Binance, Coinbase, Kraken, Bybit, KuCoin, Gate.io, MEXC | MOCK | Canlı OKX referansına sabit sapmayla üretilir |
+| Uniswap, PancakeSwap, Curve, Trader Joe, Pangolin, SushiSwap, Balancer | MOCK | Ücret, kayma ve örnek ağ maliyeti içeren simülasyon |
+| CoinGecko | YAPILANDIRMA GEREKLİ | Geniş piyasa / on-chain doğrulama için planlandı |
+| CoinMarketCap | YAPILANDIRMA GEREKLİ | Piyasa çifti ve hacim doğrulama için planlandı |
+| Alchemy Prices | YAPILANDIRMA GEREKLİ | Token adresi ve DEX fiyat doğrulama için planlandı |
+
+“Tüm borsalar” ifadesi bu sürümde, mimariyi göstermek için seçilmiş geniş ve temsilî katalog anlamındadır; internetteki her borsa için canlı entegrasyon anlamına gelmez.
 
 ## Başlatma
 
-Node.js 20+ kurulu bir ortamda:
+Node.js 20 veya üzeri gerekir.
 
 ```bash
-npm test
+npm install
+cp .env.example .env.local
+npm run check
 npm start
 ```
 
-Sonra terminalin gösterdiği yerel adresi açın. Bağımlılık yoktur; `npx serve` yalnızca statik dosyaları sunar.
+Ardından `http://127.0.0.1:4173` adresini açın.
 
-## Mevcut kapsam
+## Önemli API uçları
 
-- BTC-USDT, BTC-TRY, USDT-TRY ile deterministik fark hesabı
-- Veri tazeliği kontrolü (90 saniye); sorun varsa **VERİ HATASI** ve işlem yok
-- Bütçe ve kabul edilen fark ile AL / BEKLE işlem planı
-- Örnek veri ve ayrı açık piyasa verisi denemesi
-- Fuji için yalnızca karar özeti yayınlayan Solidity kontratı taslağı
+- `GET /api/health`: servis, emir kilidi ve Fuji durumu
+- `GET /api/market?budgetTry=1000&maxPremiumPct=0.8`: canlı OKX kararı
+- `GET /api/opportunities?budgetTry=1000&maxPremiumPct=0.8`: canlı + mock ekosistem taraması
+- `POST /api/orders/preview`: güncel kararla güvenli emir önizlemesi
+- `POST /api/orders/confirm`: yalnızca kilit açık ve açık kullanıcı onayı varsa emir
+- `POST /api/ledger/record`: karar özetini yapılandırılmış Fuji kontratına yazma
 
-## Entegrasyon sınırları
+## Proje yapısı
 
-`src/market-data.js` içindeki `createAtkMarketProvider`, ATK istemcisinin ekleneceği adaptördür. ATK doğrulaması ve yetkilendirilmiş spot emir, sunucu tarafında uygulanmalıdır; API anahtarları asla tarayıcıda tutulmaz. Açık piyasa çağrısı yalnızca hackathon prototipindeki veri akışını göstermek içindir.
+- `server/okx-atk.js`: OKX Agent Trade Kit adaptörü
+- `server/market-service.js`: canlı OKX fiyatlarının normalize edilmesi
+- `server/venue-service.js`: çoklu CEX/DEX maliyet modeli ve fırsat taraması
+- `server/order-service.js`: iki aşamalı güvenli emir akışı
+- `server/avalanche-service.js`: Fuji karar kaydı
+- `src/decision.js`: deterministik AL / BEKLE karar motoru
+- `contracts/DecisionLedger.sol`: zincir üstü karar özeti
+- `KOPRU_PROJE_PLANI.md`: kapsam, mimari ve yol haritası
+- `DEVIR_NOTU.md`: projeyi devralan geliştirici için ilk okuma belgesi
 
-Fuji kontratı henüz dağıtılmadı. Dağıtımın ardından kontrat adresi, işlem kimliği ve explorer bağlantısı karar ekranına eklenecek.
+## Güvenlik
+
+- API anahtarları tarayıcıya verilmez ve repoya yazılmaz.
+- `.env.local` Git tarafından yok sayılır.
+- `ENABLE_OKX_ORDERS=false` varsayılandır.
+- Gerçek emir için hem sunucu kilidi hem kısa ömürlü önizleme hem de `ONAYLIYORUM` ifadesi gerekir.
+- Çoklu piyasa tarayıcısı şu aşamada gözlem/simülasyon içindir.

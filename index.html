@@ -3,17 +3,54 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Köprü: OKX TR BTC alım karar desteği" />
-    <title>Köprü — BTC Alım Kararı</title>
-    <link rel="stylesheet" href="styles.css" />
+    <meta name="description" content="Köprü: canlı OKX ve etiketli mock CEX/DEX arbitraj gözlemcisi" />
+    <title>Köprü — CEX/DEX Fırsat Tarayıcı</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <main class="shell">
-      <header><p class="eyebrow">OKX TR İÇİN KARAR DESTEĞİ</p><h1>Köprü</h1><p class="lede">Global BTC fiyatını TL karşılığıyla kıyasla, kendi kuralına göre karar ver.</p></header>
-      <section class="policy" aria-labelledby="policy-title"><h2 id="policy-title">Alım kuralın</h2><div class="fields"><label>Bütçe (TL)<input id="budget" type="number" min="1" step="1" value="1000" /></label><label>Kabul edilen en yüksek fark (%)<input id="premium" type="number" min="0" step="0.1" value="0.8" /></label></div><div class="actions"><button id="check-demo">Örnek veriyi kontrol et</button><button id="check-live" class="secondary">Canlı piyasayı kontrol et</button></div><p id="source-note" class="hint">Örnek veri kullanılıyor. Bu işlem emri göndermez.</p></section>
-      <section id="result" class="result hidden" aria-live="polite"></section>
-      <section class="safety"><h2>Önemli</h2><p>Köprü kâr garantisi vermez. Bu ekran yalnızca işlem planı üretir; kullanıcı onayı ve güvenli sunucu bağlantısı olmadan emir göndermez.</p></section>
+      <header class="hero">
+        <div><p class="eyebrow">CANLI OKX + ETİKETLİ CEX/DEX SİMÜLASYONU</p><h1>Köprü</h1><p class="lede">BTC fiyatını farklı piyasalarda aynı TL tabanına taşır; ücret, kayma ve ağ maliyetinden sonra görünen arbitraj rotalarını karşılaştırır.</p></div>
+        <div class="status-card"><span id="api-dot" class="dot"></span><div><strong id="api-status">Sistem kontrol ediliyor</strong><small id="system-detail">ATK ve Fuji durumu okunuyor</small></div></div>
+      </header>
+
+      <ol class="flow" aria-label="Köprü işlem akışı">
+        <li><span>1</span>Veriyi al</li><li><span>2</span>Piyasaları normalize et</li><li><span>3</span>Rotayı hesapla</li><li><span>4</span>Güvenle doğrula</li>
+      </ol>
+
+      <section class="panel policy" aria-labelledby="policy-title">
+        <div class="section-heading"><div><p class="eyebrow">KULLANICI POLİTİKASI</p><h2 id="policy-title">Alım kuralın</h2></div><span class="safe-badge">Emir varsayılan olarak kapalı</span></div>
+        <div class="fields">
+          <label>Bütçe (TL)<input id="budget" type="number" min="1" max="1000" step="1" value="1000" /></label>
+          <label>Kabul edilen en yüksek fark (%)<input id="premium" type="number" min="0" max="20" step="0.1" value="0.8" /></label>
+        </div>
+        <div class="actions"><button id="scan-ecosystem">CEX/DEX ekosistemini tara</button><button id="check-live" class="secondary">Yalnız OKX kararını kontrol et</button><button id="check-demo" class="secondary">Örnek senaryoyu göster</button></div>
+        <p id="source-note" class="hint">OKX TR ve Global canlıdır. Diğer borsa ve DEX fiyatları, canlı OKX referansından üretilen ve açıkça MOCK işaretlenen simülasyonlardır.</p>
+      </section>
+
+      <section id="message" class="message hidden" role="alert"></section>
+      <section id="result" class="panel result hidden" aria-live="polite">
+        <div class="decision"><div><p class="eyebrow">KARAR</p><h2 id="decision-title">—</h2></div><p id="decision-reason"></p></div>
+        <div id="price-grid" class="grid"></div>
+        <div class="result-actions"><button id="preview-order">İşlem planını hazırla</button><button id="record-fuji" class="secondary">Kararı Fuji’ye kaydet</button></div>
+        <p id="result-meta" class="timestamp"></p>
+      </section>
+
+      <section id="approval" class="panel approval hidden" aria-live="polite">
+        <p class="eyebrow">İKİ AŞAMALI GÜVENLİK</p><h2>Emir önizlemesi</h2><p id="approval-copy"></p>
+        <div id="approval-controls" class="hidden"><label>Devam etmek için <strong>ONAYLIYORUM</strong> yaz<input id="confirmation" autocomplete="off" /></label><button id="confirm-order" class="danger">Gerçek spot emri gönder</button></div>
+      </section>
+
+      <section id="ecosystem" class="panel hidden" aria-live="polite">
+        <div class="section-heading"><div><p class="eyebrow">ÇOKLU PİYASA GÖZLEMCİSİ</p><h2>Temsilî CEX / DEX kapsamı</h2></div><p id="coverage-summary" class="coverage-summary"></p></div>
+        <div class="legend" aria-label="Veri durumu açıklamaları"><span class="badge live">CANLI</span><small>Gerçek API verisi</small><span class="badge mock">MOCK</span><small>Simülasyon, emir yok</small><span class="badge config">YAPILANDIRMA GEREKLİ</span><small>Entegrasyon hazır değil</small></div>
+        <article id="opportunity" class="opportunity"></article>
+        <div class="table-wrap"><table><thead><tr><th>Piyasa</th><th>Tür</th><th>Durum</th><th>Ham BTC/TL</th><th>Efektif alış</th><th>Efektif satış</th><th>Maliyet modeli</th></tr></thead><tbody id="venue-rows"></tbody></table></div>
+        <div><p class="eyebrow provider-title">VERİ SAĞLAYICILARI</p><div id="provider-list" class="provider-list"></div></div>
+      </section>
+
+      <section class="panel transparency"><h2>Köprü neyi garanti etmez?</h2><div class="grid"><p>Fiyat farkı kâr garantisi değildir. Piyasa hareketi, ücret, kayma, ağ maliyeti ve transfer süresi sonucu değiştirebilir.</p><p>MOCK etiketli kaynaklar gerçek fiyat değildir. Sistem şu aşamada borsalar arasında para taşımaz ve gerçek çoklu-piyasa emri göndermez.</p></div></section>
     </main>
-    <script type="module" src="src/app.js"></script>
+    <script type="module" src="/src/app.js"></script>
   </body>
 </html>

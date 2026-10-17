@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { ContractFactory, JsonRpcProvider, Wallet } from 'ethers';
+import { loadLocalEnv } from '../server/config.js';
+import { FUJI_CHAIN_ID } from '../server/avalanche-service.js';
+
+loadLocalEnv();
+const rpcUrl = process.env.AVALANCHE_FUJI_RPC_URL || 'https://api.avax-test.network/ext/bc/C/rpc';
+const privateKey = process.env.AVALANCHE_FUJI_PRIVATE_KEY;
+if (!privateKey) throw new Error('AVALANCHE_FUJI_PRIVATE_KEY eksik. Önce npm run fuji:wallet çalıştırın.');
+const artifactPath = path.resolve('artifacts/DecisionLedger.json');
+if (!fs.existsSync(artifactPath)) throw new Error('Kontrat artifact’i yok. Önce npm run contract:compile çalıştırın.');
+const artifact = JSON.parse(fs.readFileSync(artifactPath, 'utf8'));
+const provider = new JsonRpcProvider(rpcUrl);
+const network = await provider.getNetwork();
+if (Number(network.chainId) !== FUJI_CHAIN_ID) throw new Error(`Yanlış ağ: ${network.chainId}`);
+const wallet = new Wallet(privateKey, provider);
+const balance = await provider.getBalance(wallet.address);
+if (balance === 0n) throw new Error(`Fuji test AVAX gerekli. Cüzdan: ${wallet.address}`);
+const factory = new ContractFactory(artifact.abi, artifact.bytecode, wallet);
+const contract = await factory.deploy();
+await contract.waitForDeployment();
+const address = await contract.getAddress();
+const transaction = contract.deploymentTransaction();
+console.log(`DecisionLedger: ${address}`);
+console.log(`İşlem: https://explorer-test.avax.network/c-chain/tx/${transaction.hash}`);
+console.log(`.env.local dosyasına ekleyin: DECISION_LEDGER_ADDRESS=${address}`);
