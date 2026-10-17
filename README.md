@@ -42,6 +42,10 @@ npm start
 
 Ardından `http://127.0.0.1:4173` adresini açın.
 
+## Görsel portal prototipi
+
+Tasarım araştırması için eklenen tek dosyalık, canvas tabanlı **Planet Jumping** deneyimi `/portal` adresinde açılır. Bu deneyim mevcut Köprü kontrol panelinden ayrıdır; finansal işlevleri değiştirmez. Mars → Earth → Venus geçişi, video preloader, pointer tilt, özel imleç ve mobil kırılımlar aynı HTML dosyasında bulunur.
+
 ## Önemli API uçları
 
 - `GET /api/health`: servis, emir kilidi ve Fuji durumu

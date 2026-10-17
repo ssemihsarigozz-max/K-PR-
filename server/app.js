@@ -5,6 +5,7 @@ import { URL } from 'node:url';
 const PUBLIC_FILES = new Map([
   ['/', ['index.html', 'text/html; charset=utf-8']],
   ['/styles.css', ['styles.css', 'text/css; charset=utf-8']],
+  ['/portal', ['planet-jumping.html', 'text/html; charset=utf-8']],
   ['/src/app.js', ['src/app.js', 'text/javascript; charset=utf-8']],
   ['/src/decision.js', ['src/decision.js', 'text/javascript; charset=utf-8']]
 ]);
@@ -40,7 +41,7 @@ export function createHandler({ marketService, orderService, avalancheService, v
       }
       if (request.method === 'GET' && PUBLIC_FILES.has(url.pathname)) {
         const [relative, contentType] = PUBLIC_FILES.get(url.pathname);
-        response.writeHead(200, securityHeaders(contentType));
+        response.writeHead(200, securityHeaders(contentType, url.pathname === '/portal'));
         return response.end(fs.readFileSync(path.join(rootDir, relative)));
       }
       return json(response, 404, { error: 'Bulunamadı.' });
@@ -67,13 +68,15 @@ function json(response, status, data) {
   response.end(JSON.stringify(data, jsonReplacer));
 }
 function jsonReplacer(_key, value) { return typeof value === 'bigint' ? value.toString() : value; }
-function securityHeaders(contentType) {
+function securityHeaders(contentType, immersivePortal = false) {
   return {
     'Content-Type': contentType,
     'Cache-Control': 'no-store',
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
     'Referrer-Policy': 'no-referrer',
-    'Content-Security-Policy': "default-src 'self'; connect-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'"
+    'Content-Security-Policy': immersivePortal
+      ? "default-src 'self'; media-src 'self' https://d2ol7oe51mr4n9.cloudfront.net; img-src 'self' data: https://d2ol7oe51mr4n9.cloudfront.net; script-src 'unsafe-inline'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
+      : "default-src 'self'; connect-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; base-uri 'none'; frame-ancestors 'none'"
   };
 }
