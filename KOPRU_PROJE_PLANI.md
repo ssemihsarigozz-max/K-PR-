@@ -104,6 +104,9 @@ flowchart LR
 - [x] Mock rotalar için yürütme engeli
 - [x] Fuji cüzdanı oluşturma, kontrat derleme ve dağıtım betikleri
 - [x] Otomatik test paketi ve güvenlik başlıkları
+- [x] Yerel agent durum makinesi ve otomatik tarama döngüsü
+- [x] Kalıcı sanal TL/BTC portföyü ve paper işlem geçmişi
+- [x] Günlük işlem, cooldown, bakiye ve pozisyon risk sınırları
 
 ## 8. Sıradaki geliştirme adımları
 

@@ -26,7 +26,17 @@ export function readConfig(env = process.env) {
     fujiRpcUrl: env.AVALANCHE_FUJI_RPC_URL || 'https://api.avax-test.network/ext/bc/C/rpc',
     fujiPrivateKey: env.AVALANCHE_FUJI_PRIVATE_KEY || '',
     ledgerAddress: env.DECISION_LEDGER_ADDRESS || '',
-    autoRecordFuji: env.AUTO_RECORD_FUJI === 'true'
+    autoRecordFuji: env.AUTO_RECORD_FUJI === 'true',
+    agentAutoStart: env.AGENT_AUTO_START !== 'false',
+    agentIntervalMs: toInteger(env.AGENT_INTERVAL_MS, 60_000),
+    agentBudgetTry: toNumber(env.AGENT_BUDGET_TRY, 1_000),
+    agentMaxPremiumPct: toNumber(env.AGENT_MAX_PREMIUM_PCT, 0.8),
+    paperInitialTry: toNumber(env.PAPER_INITIAL_TRY, 10_000),
+    paperFeePct: toNumber(env.PAPER_FEE_PCT, 0.1),
+    paperMaxTradesPerDay: toInteger(env.PAPER_MAX_TRADES_PER_DAY, 3),
+    paperCooldownMs: toInteger(env.PAPER_COOLDOWN_MS, 1_800_000),
+    paperMaxExposureTry: toNumber(env.PAPER_MAX_EXPOSURE_TRY, 5_000),
+    agentStatePath: env.AGENT_STATE_PATH || path.resolve('.local-data/agent-state.json')
   };
 }
 

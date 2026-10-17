@@ -9,6 +9,7 @@ dist/
 coverage/
 artifacts/
 cache/
+.local-data/
 
 # Sistem ve editör dosyaları
 .DS_Store

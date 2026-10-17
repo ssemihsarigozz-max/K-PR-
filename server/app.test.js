@@ -9,7 +9,12 @@ test('health ve piyasa API uçları yanıt verir', async (t) => {
     marketService: { check: async (policy) => ({ status: 'OK', decision: 'AL', policy }) },
     orderService: { enableOrders: false },
     avalancheService: { health: async () => ({ chainId: 43113, configured: false }) },
-    venueService: { scan: async (policy) => ({ status: 'OK', coverage: { live: 2, mock: 14 }, policy }) }
+    venueService: { scan: async (policy) => ({ status: 'OK', coverage: { live: 2, mock: 14 }, policy }) },
+    agentService: {
+      getStatus: () => ({ running: true, phase: 'IDLE' }),
+      start: () => ({ running: true }), stop: () => ({ running: false }),
+      runOnce: async () => ({ action: { type: 'NO_TRADE' } })
+    }
   });
   const server = http.createServer(handler).listen(0, '127.0.0.1');
   await once(server, 'listening');
@@ -18,6 +23,7 @@ test('health ve piyasa API uçları yanıt verir', async (t) => {
   const health = await (await fetch(`${base}/api/health`)).json();
   assert.equal(health.ok, true);
   assert.equal(health.fuji.chainId, 43113);
+  assert.equal(health.agent.running, true);
   const market = await (await fetch(`${base}/api/market?budgetTry=1000&maxPremiumPct=0.8`)).json();
   assert.equal(market.decision, 'AL');
   assert.equal(market.policy.budgetTry, 1000);
@@ -28,4 +34,6 @@ test('health ve piyasa API uçları yanıt verir', async (t) => {
   assert.equal(portal.status, 200);
   assert.match(await portal.text(), /Köprü — Liquidity Jumping/);
   assert.match(portal.headers.get('content-security-policy'), /d2ol7oe51mr4n9\.cloudfront\.net/);
+  const agent = await (await fetch(`${base}/api/agent/status`)).json();
+  assert.equal(agent.phase, 'IDLE');
 });

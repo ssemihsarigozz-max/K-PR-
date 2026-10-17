@@ -14,6 +14,7 @@ Köprü, BTC fiyatını CEX ve DEX kaynaklarında ortak bir TL tabanına getirip
 - Mock ayak içeren rotalarda zorunlu `executable: false` güvenlik kuralı.
 - Avalanche Fuji karar kaydı kontratı, derleme ve dağıtım betikleri.
 - 16 otomatik test ve Solidity derleme kontrolü.
+- Yerelde otomatik çalışan, kalıcı portföylü OKX paper-trading agentı.
 
 ## Veri durumu
 
@@ -54,6 +55,29 @@ Tek dosyalık, canvas tabanlı **Liquidity Jumping** deneyimi `/portal` adresind
 - `POST /api/orders/preview`: güncel kararla güvenli emir önizlemesi
 - `POST /api/orders/confirm`: yalnızca kilit açık ve açık kullanıcı onayı varsa emir
 - `POST /api/ledger/record`: karar özetini yapılandırılmış Fuji kontratına yazma
+- `GET /api/agent/status`: agent fazı, portföy, karar, olay ve işlem geçmişi
+- `POST /api/agent/start`: yerel döngüyü başlatma
+- `POST /api/agent/stop`: yerel döngüyü durdurma
+- `POST /api/agent/run`: beklemeden tek agent döngüsü çalıştırma
+
+## Yerel agent
+
+Agent sunucuyla birlikte varsayılan olarak otomatik başlar. Yalnızca canlı OKX verisini karar girdisi olarak kullanır ve sadece **paper trading** yapar. Durum makinesi şu akışı izler:
+
+```text
+GÖZLEMLE → DOĞRULA → RİSK KONTROLÜ → PAPER İŞLEM → KAYDET
+```
+
+Terminal komutları:
+
+```bash
+npm run agent:status
+npm run agent:run
+npm run agent:stop
+npm run agent:start
+```
+
+Portföy, son kararlar ve olay geçmişi `.local-data/agent-state.json` içinde yerel olarak saklanır ve Git’e eklenmez. Varsayılan güvenlik politikası: 10.000 TL sanal başlangıç bakiyesi, tur başına 1.000 TL, günde en fazla 3 paper işlem, işlemler arasında 30 dakika ve en fazla 5.000 TL BTC pozisyonu. Agentın gerçek emir servisine erişimi yoktur.
 
 ## Proje yapısı
 

@@ -5,6 +5,7 @@ import { MarketService } from './market-service.js';
 import { OrderService } from './order-service.js';
 import { AvalancheService } from './avalanche-service.js';
 import { VenueService } from './venue-service.js';
+import { LocalAgentService } from './agent-service.js';
 import { createHandler } from './app.js';
 
 loadLocalEnv();
@@ -19,8 +20,22 @@ const avalancheService = new AvalancheService({
   rpcUrl: config.fujiRpcUrl, privateKey: config.fujiPrivateKey, ledgerAddress: config.ledgerAddress
 });
 const venueService = new VenueService({ marketService });
-const server = http.createServer(createHandler({ marketService, orderService, avalancheService, venueService }));
+const agentService = new LocalAgentService({
+  marketService, storagePath: config.agentStatePath, intervalMs: config.agentIntervalMs,
+  policy: { budgetTry: config.agentBudgetTry, maxPremiumPct: config.agentMaxPremiumPct },
+  initialTry: config.paperInitialTry, paperFeePct: config.paperFeePct,
+  maxTradesPerDay: config.paperMaxTradesPerDay, cooldownMs: config.paperCooldownMs,
+  maxExposureTry: config.paperMaxExposureTry
+});
+const server = http.createServer(createHandler({ marketService, orderService, avalancheService, venueService, agentService }));
 server.listen(config.port, '127.0.0.1', () => {
   console.log(`Köprü çalışıyor: http://127.0.0.1:${config.port}`);
   console.log(`Gerçek emir: ${config.enableOkxOrders ? 'AÇIK' : 'KAPALI'}`);
+  console.log(`Yerel paper agent: ${config.agentAutoStart ? 'OTOMATİK' : 'ELLE'}`);
+  if (config.agentAutoStart) agentService.start();
+});
+
+for (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => {
+  agentService.stop();
+  server.close(() => process.exit(0));
 });

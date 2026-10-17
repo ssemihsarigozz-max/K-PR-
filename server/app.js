@@ -10,14 +10,14 @@ const PUBLIC_FILES = new Map([
   ['/src/decision.js', ['src/decision.js', 'text/javascript; charset=utf-8']]
 ]);
 
-export function createHandler({ marketService, orderService, avalancheService, venueService, rootDir = process.cwd() }) {
+export function createHandler({ marketService, orderService, avalancheService, venueService, agentService, rootDir = process.cwd() }) {
   return async function handler(request, response) {
     try {
       const url = new URL(request.url, 'http://localhost');
       if (request.method === 'GET' && url.pathname === '/api/health') {
         let fuji = { reachable: false, configured: false };
         try { fuji = { reachable: true, ...(await avalancheService.health()) }; } catch (error) { fuji.error = error.message; }
-        return json(response, 200, { ok: true, service: 'Köprü', tradingEnabled: orderService.enableOrders, fuji });
+        return json(response, 200, { ok: true, service: 'Köprü', tradingEnabled: orderService.enableOrders, agent: agentService?.getStatus?.(), fuji });
       }
       if (request.method === 'GET' && url.pathname === '/api/market') {
         const result = await marketService.check(readPolicy(url.searchParams));
@@ -27,6 +27,10 @@ export function createHandler({ marketService, orderService, avalancheService, v
         const result = await venueService.scan(readPolicy(url.searchParams));
         return json(response, 200, result);
       }
+      if (request.method === 'GET' && url.pathname === '/api/agent/status') return json(response, 200, agentService.getStatus());
+      if (request.method === 'POST' && url.pathname === '/api/agent/start') return json(response, 200, agentService.start());
+      if (request.method === 'POST' && url.pathname === '/api/agent/stop') return json(response, 200, agentService.stop());
+      if (request.method === 'POST' && url.pathname === '/api/agent/run') return json(response, 200, await agentService.runOnce());
       if (request.method === 'POST' && url.pathname === '/api/orders/preview') {
         const body = await readBody(request);
         return json(response, 200, await orderService.preview(body.policy || {}));

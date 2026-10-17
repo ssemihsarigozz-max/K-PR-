@@ -9,7 +9,11 @@
     "check": "node --check server/index.js && node --check src/app.js && npm test && npm run contract:compile",
     "contract:compile": "node scripts/compile-contract.js",
     "fuji:wallet": "node scripts/create-fuji-wallet.js",
-    "fuji:deploy": "node scripts/deploy-fuji.js"
+    "fuji:deploy": "node scripts/deploy-fuji.js",
+    "agent:status": "node scripts/agent-control.js status",
+    "agent:start": "node scripts/agent-control.js start",
+    "agent:stop": "node scripts/agent-control.js stop",
+    "agent:run": "node scripts/agent-control.js run"
   },
   "description": "Canlı OKX ve etiketli mock CEX/DEX verileriyle agentic arbitraj gözlemcisi",
   "dependencies": {

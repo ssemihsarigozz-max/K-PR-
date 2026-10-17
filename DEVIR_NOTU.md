@@ -5,7 +5,7 @@
 1. `README.md` ile `KOPRU_PROJE_PLANI.md` dosyalarını okuyun.
 2. Node.js 20+ ortamında `npm install` çalıştırın.
 3. `.env.example` dosyasını `.env.local` olarak kopyalayın; gizli değerleri repoya eklemeyin.
-4. `npm run check` çalıştırın. Beklenen sonuç: 16 test geçer ve kontrat derlenir.
+4. `npm run check` çalıştırın. Beklenen sonuç: tüm testler geçer ve kontrat derlenir.
 5. `npm start` çalıştırıp `http://127.0.0.1:4173` adresini açın.
 6. Önce “CEX/DEX ekosistemini tara” düğmesini deneyin. Yalnız OKX satırlarının CANLI, diğerlerinin MOCK olduğuna dikkat edin.
 
@@ -18,6 +18,8 @@
 **Hazır ama dağıtılmadı:** Avalanche Fuji `DecisionLedger`. Cüzdan oluşturuldu ancak test AVAX ve başarılı Fuji RPC erişimi olmadan kontrat adresi yoktur.
 
 **Henüz canlı değil:** Binance, Coinbase, Kraken, Bybit, KuCoin, Gate.io, MEXC ve tüm DEX satırları. CoinGecko, CoinMarketCap ve Alchemy de henüz bağlanmadı.
+
+**Yerel agent:** Sunucuyla otomatik başlar, 60 saniyede bir canlı OKX karar döngüsü çalıştırır ve yalnızca sanal portföyde işlem yapar. Durumu `npm run agent:status` ile okunur. Yerel kayıt `.local-data/agent-state.json` içindedir ve repoya girmez.
 
 ## Mimari kararlar
 
