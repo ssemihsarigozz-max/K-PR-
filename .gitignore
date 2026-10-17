@@ -1,0 +1,17 @@
+# Gizli yapılandırma
+.env
+.env.*
+!.env.example
+
+# Bağımlılıklar ve derleme çıktıları
+node_modules/
+dist/
+coverage/
+artifacts/
+cache/
+
+# Sistem ve editör dosyaları
+.DS_Store
+*.log
+.idea/
+.vscode/

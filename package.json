@@ -1,0 +1,11 @@
+{
+  "name": "kopru",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "npx serve ."
+  },
+  "description": "OKX TR BTC alım kararını açıklanabilir kurallarla destekleyen MVP"
+}
